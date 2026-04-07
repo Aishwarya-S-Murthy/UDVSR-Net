@@ -1,0 +1,167 @@
+# general settings
+name: Underwater_Video_SR_2x
+model_type: VideoSRModel  # CHANGED: from ImageCleanModel
+scale: 2  # CHANGED: from 1 (for SR task, use 2, 3, or 4)
+num_gpu: 1  # set num_gpu: 0 for cpu mode
+manual_seed: 100
+
+# dataset and data loader settings
+datasets:
+  train:
+    name: TrainSet
+    type: VideoSRDataset  
+    dataroot_gt: D:\Aishwarya\Code Ongoing\Underwater Synthetic\UVSR\train\GT\GT_x2
+    dataroot_lq: D:\Aishwarya\Code Ongoing\Underwater Synthetic\UVSR\train\input
+    
+    # NEW: Video-specific settings
+    num_frame: 8  
+    
+    # NEW: Data augmentation for video
+    use_hflip: true
+    use_rot: true
+    geometric_augs: false  
+
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+    # data loader
+    use_shuffle: true
+    num_worker_per_gpu: 2  
+    batch_size_per_gpu: 1  
+
+    ### -------------Progressive training--------------------------
+    #mini_batch_sizes: [2,2,1,1,1,1]             
+    #iters: [92000,64000,48000,36000,36000,24000]
+    #gt_size: 256   
+    #gt_sizes: [64,96,128,160,192,256]  
+    ### ------------------------------------------------------------
+
+    ### ------- Training on single fixed-patch size 128x128---------
+    mini_batch_sizes: [1]   
+    iters: [300000]
+    gt_size: 192   
+    gt_sizes: [192]
+    ### ------------------------------------------------------------
+
+    dataset_enlarge_ratio: 1
+    prefetch_mode: ~
+
+  val:
+    name: underwater_video_sr_val
+    type: VideoSRTestDataset  
+    dataroot_gt: D:\Aishwarya\Code Ongoing\Underwater Synthetic\UVSR\test_sample\GT\GT_x2
+    dataroot_lq: D:\Aishwarya\Code Ongoing\Underwater Synthetic\UVSR\test_sample\input
+    
+    # NEW: Video-specific settings
+    num_frame: 8  
+    cache_data: false  
+    padding: reflection
+    
+    io_backend:
+      type: disk
+
+# network structures
+network_g:
+  type: VideoSRNet  
+  in_channels: 3
+  out_channels: 3
+  embed_dim: 24 
+  scale_factor: 2  # NEW: must match scale above
+  num_spatial_blocks: 1  # NEW: number of spatial transformer blocks
+  num_temporal_blocks: 1  # NEW: number of temporal DWT blocks
+  num_refinement_blocks: 1  
+  num_heads: 3  # NEW: number of attention heads
+  ffn_expansion_factor: 2.2 #2.66  # Same as before
+
+
+# path
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+  resume_state: D:\Aishwarya\Code Ongoing\Underwater Video SR Multiscale\experiments\Underwater_Video_SR_2x\training_states\364000.state
+
+# training settings
+train:
+  total_iter: 600000
+  warmup_iter: 10000 # no warm up for now, set to 0 if not needed
+  use_grad_clip: true
+
+  # Split 300k iterations into two cycles. 
+  # 1st cycle: fixed 2e-4 LR for 92k iters. 
+  # 2nd cycle: cosine annealing (2e-4 to 1e-6) for 208k iters.
+  scheduler:
+    type: CosineAnnealingRestartCyclicLR
+    periods: [184000, 416000]      
+    restart_weights: [1,1]
+    eta_mins: [0.0005,0.000001]   #0.0002
+  
+  mixing_augs:
+    mixup: false  
+    mixup_beta: 1.2
+    use_identity: true
+
+  optim_g:
+    type: AdamW
+    lr: !!float 5e-4  
+    weight_decay: !!float 1e-4
+    betas: [0.9, 0.999]
+  
+  # losses
+  pixel_opt:
+    type: L1Loss  
+    loss_weight: 1
+    reduction: mean
+
+  fft_opt:
+    type: FFTLoss  
+    loss_weight: 0.01 # Start with 0.1 so it doesn't overpower the L1 loss
+    reduction: mean
+
+  # NEW: Added SSIM loss
+  ssim_opt:
+    type: SSIMLoss
+    loss_weight: 0.2 # Adjust this weight depending on how much priority you want to give SSIM vs L1
+    window_size: 11
+    reduction: mean
+
+# validation settings
+val:
+  window_size: 8  
+  val_freq: !!float 14e3
+  save_img: false  
+  
+  # NEW: Video-specific validation settings
+  use_middle_frame: false  # Use middle frame for metrics (faster)
+  save_all_frames: false  # Set true to save all 8 frames
+  
+  rgb2bgr: true
+  use_image: true
+  max_minibatch: 1  
+
+  metrics:
+    psnr: 
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: true
+    ssim:  
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: true
+
+# logging settings
+logger:
+  print_freq: 1000  
+  save_checkpoint_freq: !!float 14e3
+  use_tb_logger: true
+  wandb:
+    project: ~  
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500
+
+# NEW: Optional - find unused parameters for DDP
+find_unused_parameters: false

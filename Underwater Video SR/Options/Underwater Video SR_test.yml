@@ -1,0 +1,68 @@
+name: Underwater_Video_SR_Test_x2
+model_type: VideoSRModel
+scale: 2
+num_gpu: 1
+manual_seed: 100
+
+datasets:
+  test_1:
+    name: underwater_video_sr_val
+    type: VideoSRTestDataset
+    dataroot_gt: D:\Aishwarya\Code Ongoing\Underwater Synthetic\UVSR\test\GT\GT_x2
+    dataroot_lq: D:\Aishwarya\Code Ongoing\Underwater Synthetic\UVSR\test\input 
+    num_frame: 8
+    cache_data: false
+    padding: replicate
+    io_backend:
+      type: disk
+
+# MUST match your training architecture
+network_g:
+  type: VideoSRNet  
+  in_channels: 3
+  out_channels: 3
+  embed_dim: 24 
+  scale_factor: 2  # NEW: must match scale above
+  num_spatial_blocks: 1  # NEW: number of spatial transformer blocks
+  num_temporal_blocks: 1  # NEW: number of temporal DWT blocks
+  num_refinement_blocks: 1  
+  num_heads: 3  # NEW: number of attention heads
+  ffn_expansion_factor: 2.2 #2.66  # Same as before
+
+path:
+  # Path to your trained model checkpoint
+  pretrain_network_g: D:\Aishwarya\Code Ongoing\Underwater Video SR Multiscale\experiments\Underwater_Video_SR_2x\models\net_g_490000.pth
+  strict_load_g: true
+
+val:
+  save_img: true
+  rgb2bgr: true
+  use_image: true
+  window_size: 8
+  
+  # Set to true to save every frame of the 8-frame clip
+  save_all_frames: true 
+  use_middle_frame: false
+
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: true
+    
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: true # Added: SSIM will now also be calculated on Y-channel
+
+    lpips:                  
+      type: calculate_lpips
+      crop_border: 0
+
+    uciqe:
+      type: calculate_uciqe
+      crop_border: 0
+
+    uiqm:
+      type: calculate_uiqm
+      crop_border: 0

@@ -3,52 +3,6 @@ import math
 from scipy import ndimage
 import cv2
 
-# ==============================================================================
-# UCIQE Implementation
-# ==============================================================================
-
-def calculate_uciqe(img1, img2=None, crop_border=0, **kwargs):
-    """
-    Calculate UCIQE (Underwater Color Image Quality Evaluation).
-    No-reference metric. img2 (Ground Truth) is ignored.
-    """
-    if crop_border != 0:
-        img1 = img1[crop_border:-crop_border, crop_border:-crop_border, ...]
-        
-    # Ensure image is uint8
-    if img1.dtype != np.uint8:
-        img1 = (np.clip(img1, 0, 1) * 255.0).astype(np.uint8)
-
-    # Convert BGR to CIELab
-    # Assuming input is BGR as per tensor2img default in BasicSR
-    lab = cv2.cvtColor(img1, cv2.COLOR_BGR2LAB).astype(np.float32) / 255.0
-    
-    l = lab[:, :, 0]
-    a = lab[:, :, 1]
-    b = lab[:, :, 2]
-
-    # 1. Variance of Chroma
-    chroma = np.sqrt(a**2 + b**2)
-    sigma_c = np.std(chroma)
-
-    # 2. Contrast of Luminance (Difference between top 1% and bottom 1%)
-    l_flatten = l.flatten()
-    l_flatten.sort()
-    idx = int(len(l_flatten) * 0.01)
-    if idx == 0:
-        con_l = np.max(l_flatten) - np.min(l_flatten)
-    else:
-        con_l = np.mean(l_flatten[-idx:]) - np.mean(l_flatten[:idx])
-
-    # 3. Average of Saturation
-    saturation = chroma / (l + 1e-6) # Add epsilon to avoid division by zero
-    mu_s = np.mean(saturation)
-
-    # UCIQE equation with standard weights
-    uciqe = 0.4680 * sigma_c + 0.2745 * con_l + 0.2576 * mu_s
-    
-    return float(uciqe)
-
 
 # ==============================================================================
 # UIQM Implementation (Asymmetric Alpha-Trimmed + EME)

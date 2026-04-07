@@ -5,7 +5,7 @@ import cv2
 
 
 # ==============================================================================
-# UIQM Implementation (Asymmetric Alpha-Trimmed + EME)
+# UIQM Implementation 
 # ==============================================================================
 
 def mu_a(x, alpha_L=0.1, alpha_R=0.1):

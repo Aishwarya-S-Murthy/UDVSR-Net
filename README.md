@@ -102,7 +102,7 @@ python -m basicsr.test -opt "Underwater Video SR/Options/Underwater Video SR_tes
 ```
 ## Pre-trained Models
 We provide pre-trained model checkpoints trained on our proposed UDVSR Dataset.
-| BasicVSR | EfficientU | URSCST | Madnet | RDG-s | UDVSRNet (Ours) |
+| BasicVSR | EfficientUSR | URSCST | Madnet | RDG-s | UDVSRNet (Ours) |
 |----------|------------|--------|--------|-------|-----------------|
 |          |            |        |        |       | [x2](https://drive.google.com/drive/folders/1eAvv7xm0v1LKuQ0_uqEiMlJSqGfDWuoZ?usp=drive_link)               |
 |          |            |        |        |       |  [x3](https://drive.google.com/drive/folders/1eAvv7xm0v1LKuQ0_uqEiMlJSqGfDWuoZ?usp=drive_link)               |
@@ -111,5 +111,5 @@ We provide pre-trained model checkpoints trained on our proposed UDVSR Dataset.
 ## Contact
 For any questions about this work, please contact a.murthy@iitg.ac.in.
 ## Acknowledgment: 
-This code is based on the [Restormer] (https://github.com/swz30/Restormer).
+This code is based on the [Restormer](https://github.com/swz30/Restormer).
 

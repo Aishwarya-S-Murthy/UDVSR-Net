@@ -104,13 +104,13 @@ To test the pre-trained UDVSRNet model, run the following command:
 ```bash
 python -m basicsr.test -opt "Underwater Video SR/Options/Underwater Video SR_test.yml"
 ```
-## Pre-trained Models
+<!-- ## Pre-trained Models
 We provide pre-trained model checkpoints trained on our proposed UDVSR Dataset.
 | BasicVSR | EfficientUSR | URSCST | Madnet | RDG-s | UDVSRNet (Ours) |
 |----------|------------|--------|--------|-------|-----------------|
 |          |            |        |        |       | [x2](https://drive.google.com/drive/folders/1eAvv7xm0v1LKuQ0_uqEiMlJSqGfDWuoZ?usp=drive_link)               |
 |          |            |        |        |       |  [x3](https://drive.google.com/drive/folders/1eAvv7xm0v1LKuQ0_uqEiMlJSqGfDWuoZ?usp=drive_link)               |
-|          |            |        |        |       |  [x4](https://drive.google.com/drive/folders/1eAvv7xm0v1LKuQ0_uqEiMlJSqGfDWuoZ?usp=drive_link)               |
+|          |            |        |        |       |  [x4](https://drive.google.com/drive/folders/1eAvv7xm0v1LKuQ0_uqEiMlJSqGfDWuoZ?usp=drive_link)               | -->
 
 ## Contact
 For any questions about this work, please contact a.murthy@iitg.ac.in.

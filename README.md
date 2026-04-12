@@ -13,6 +13,10 @@
 
 > *Figure: Overall architecture of UDVSRNet.* -->
 
+## Demo
+
+[![Demo Video](https://github.com/Aishwarya-S-Murthy/UDVSR-Net/blob/aea65315615187a094647d774fecb90a06c68f51/demo/demo_video.mp4)
+
 ## Installation
 
 Please refer [INSTALL.md](INSTALL.md) for the installation of dependencies required to run UDVSRNet.

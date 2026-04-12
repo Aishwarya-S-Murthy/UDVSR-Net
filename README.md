@@ -13,7 +13,7 @@
 
 > *Figure: Overall architecture of UDVSRNet.* -->
 
-## Demo
+## Demo video of UDVSR-Net
 
 [Demo video](https://github.com/Aishwarya-S-Murthy/UDVSR-Net/raw/aea65315615187a094647d774fecb90a06c68f51/demo/demo_video.mp4)
 

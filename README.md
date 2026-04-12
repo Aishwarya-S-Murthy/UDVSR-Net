@@ -114,6 +114,6 @@ We provide pre-trained model checkpoints trained on our proposed UDVSR Dataset.
 
 ## Contact
 For any questions about this work, please contact a.murthy@iitg.ac.in.
-## Acknowledgment: 
+## Acknowledgments 
 This code is based on the [Restormer](https://github.com/swz30/Restormer).
 

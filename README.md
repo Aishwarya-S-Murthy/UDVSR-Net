@@ -23,7 +23,7 @@ Please refer [INSTALL.md](INSTALL.md) for the installation of dependencies requi
 
 ## Datasets
 Download the dataset from the link below and place it in the `Datasets/` folder:
-> **[Download UDVSR Dataset][(https://drive.google.com/file/d/0B1MVW1mFO2zmZHVRWEQ3Rkc3SVE/edit?resourcekey=0-u7mAvVbthYAG-_oxzMKz3Q)](https://drive.google.com/drive/u/0/folders/1R4kZX1Y9XmFqEpeoOWVuYt7u0QCRDjwl)]**
+> **[Download UDVSR Dataset](https://drive.google.com/drive/u/0/folders/1R4kZX1Y9XmFqEpeoOWVuYt7u0QCRDjwl)**
 
 - `input/` contains the **low-resolution underwater video frames**
 - `GT/GT_x2`, `GT/GT_x3`, `GT/GT_x4` contain the **ground truth high-resolution frames** at ×2, ×3, and ×4 scale factors respectively
